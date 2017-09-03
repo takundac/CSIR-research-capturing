@@ -8,6 +8,8 @@
 
   <ItemGroup>
     <Compile Remove="Controllers\ApplicationRoleController.cs" />
+    <Compile Remove="Data\Migrations\20170903120001_AppicationDBContext.cs" />
+    <Compile Remove="Data\Migrations\20170903120001_AppicationDBContext.Designer.cs" />
   </ItemGroup>
 
 

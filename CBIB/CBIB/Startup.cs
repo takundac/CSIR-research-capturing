@@ -47,6 +47,10 @@ namespace CBIB
             services.AddDbContext<ApplicationDbContext>(options =>
                 options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
 
+            services.AddIdentity<ApplicationUser, ApplicationRole>()
+                .AddEntityFrameworkStores<ApplicationDbContext>()
+                .AddDefaultTokenProviders();
+
             services.AddIdentity<ApplicationUser, IdentityRole>(config =>
             {
                 config.SignIn.RequireConfirmedEmail = true;
@@ -107,6 +111,7 @@ namespace CBIB
                 app.UseDeveloperExceptionPage();
                 app.UseDatabaseErrorPage();
                 app.UseBrowserLink();
+                app.UseIdentity();
             }
             else
             {
@@ -116,15 +121,6 @@ namespace CBIB
             app.UseStaticFiles();
 
             app.UseIdentity();
-
-            // Add external authentication middleware below. To configure them please see https://go.microsoft.com/fwlink/?LinkID=532715
-
-            /// check code on run
-            /*var result = string.IsNullOrEmpty(_testSecret) ? "Null" : "Not Null";
-            app.Run(async (context) =>
-            {
-                await context.Response.WriteAsync($"Secret is {result}");
-            });*/
 
             app.UseMvc(routes =>
             {
