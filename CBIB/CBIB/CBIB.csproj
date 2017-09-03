@@ -6,6 +6,10 @@
     <UserSecretsId>aspnet-CBIB-B2693EC6-5C89-4055-B4D2-D88A456EAFE6</UserSecretsId>
   </PropertyGroup>
 
+  <ItemGroup>
+    <Compile Remove="Controllers\ApplicationRoleController.cs" />
+  </ItemGroup>
+
 
   <ItemGroup>
     <PackageReference Include="Microsoft.ApplicationInsights.AspNetCore" Version="2.0.0" />
