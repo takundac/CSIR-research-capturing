@@ -60,6 +60,8 @@ namespace CBIB
                 options.Filters.Add(new RequireHttpsAttribute());
             });
 
+            services.Configure<AuthMessageSenderOptions>(Configuration);
+
             services.AddMvc();
 
             // Configure Identity
