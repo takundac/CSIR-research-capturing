@@ -11,11 +11,14 @@ using CBIB.Models;
 using CBIB.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Rewrite;
+using Microsoft.AspNetCore.Http;
 
 namespace CBIB
 {
     public class Startup
     {
+        string _testSecret = null;
+
         public Startup(IHostingEnvironment env)
         {
             var builder = new ConfigurationBuilder()
@@ -38,11 +41,17 @@ namespace CBIB
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            _testSecret = Configuration["MySecret"];
+
             // Add framework services.
             services.AddDbContext<ApplicationDbContext>(options =>
                 options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
 
-            services.AddIdentity<ApplicationUser, IdentityRole>()
+            services.AddIdentity<ApplicationUser, IdentityRole>(config =>
+            {
+                config.SignIn.RequireConfirmedEmail = true;
+            })
+
                 .AddEntityFrameworkStores<ApplicationDbContext>()
                 .AddDefaultTokenProviders();
 
@@ -107,6 +116,13 @@ namespace CBIB
             app.UseIdentity();
 
             // Add external authentication middleware below. To configure them please see https://go.microsoft.com/fwlink/?LinkID=532715
+
+            /// check code on run
+            /*var result = string.IsNullOrEmpty(_testSecret) ? "Null" : "Not Null";
+            app.Run(async (context) =>
+            {
+                await context.Response.WriteAsync($"Secret is {result}");
+            });*/
 
             app.UseMvc(routes =>
             {
