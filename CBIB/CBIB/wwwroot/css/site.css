@@ -47,4 +47,8 @@ textarea {
     .carousel-caption {
         display: none;
     }
+
+    .panel-primary{
+        padding-top:50px;
+    }
 }
