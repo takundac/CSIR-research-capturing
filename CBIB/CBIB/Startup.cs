@@ -12,6 +12,8 @@ using CBIB.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Rewrite;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Identity;
+using CBIB.Configuration;
 
 namespace CBIB
 {
@@ -132,6 +134,8 @@ namespace CBIB
                     name: "default",
                     template: "{controller=Home}/{action=Index}/{id?}");
             });
+            new UserRoleSeed(app.ApplicationServices.GetService<RoleManager<IdentityRole>>()).Seed();
+
         }
     }
 }
