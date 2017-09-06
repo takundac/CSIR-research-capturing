@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Migrations;
-using CBIB;
+using CBIB.Data;
 
 namespace CBIB.Data.Migrations
 {
@@ -24,13 +24,13 @@ namespace CBIB.Data.Migrations
                     b.Property<string>("ConcurrencyStamp")
                         .IsConcurrencyToken();
 
-                    b.Property<string>("Description");
-
                     b.Property<string>("Name")
                         .HasMaxLength(256);
 
                     b.Property<string>("NormalizedName")
                         .HasMaxLength(256);
+
+                    b.Property<string>("description");
 
                     b.HasKey("Id");
 
