@@ -1,0 +1,21 @@
+﻿@model CBIB.Views.ViewModels.UserManagementIndexViewModel
+<table>
+    <thead>
+        <tr>
+            <th>Email</th>
+            <th>Role</th>
+            <th>Options</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var user in Model.Users)
+        {
+            <tr>
+                <td>@user.Email</td>
+                <td>@user.Roles</td>
+                <td><a asp-controller="UserManagement" asp-action="AddRole">Add Role</a></td>
+
+            </tr>
+        }
+    </tbody>
+</table>
