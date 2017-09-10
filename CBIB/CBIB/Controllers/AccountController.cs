@@ -491,6 +491,11 @@ namespace CBIB.Controllers
             }
         }
 
+        private long GenerateId()
+        {
+            byte[] buffer = Guid.NewGuid().ToByteArray();
+            return BitConverter.ToInt64(buffer, 0);
+        }
         #endregion
     }
 }
