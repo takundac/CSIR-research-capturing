@@ -91,6 +91,9 @@ namespace CBIB
             // Add application services.
             services.AddTransient<IEmailSender, AuthMessageSender>();
             services.AddTransient<ISmsSender, AuthMessageSender>();
+
+            services.AddDbContext<CBIBContext>(options =>
+                    options.UseSqlServer(Configuration.GetConnectionString("CBIBContext")));
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -119,22 +122,13 @@ namespace CBIB
 
             app.UseIdentity();
 
-            // Add external authentication middleware below. To configure them please see https://go.microsoft.com/fwlink/?LinkID=532715
-
-            /// check code on run
-            /*var result = string.IsNullOrEmpty(_testSecret) ? "Null" : "Not Null";
-            app.Run(async (context) =>
-            {
-                await context.Response.WriteAsync($"Secret is {result}");
-            });*/
-
             app.UseMvc(routes =>
             {
                 routes.MapRoute(
                     name: "default",
                     template: "{controller=Home}/{action=Index}/{id?}");
             });
-            new UserRoleSeed(app.ApplicationServices.GetService<RoleManager<IdentityRole>>()).Seed();
+           // new UserRoleSeed(app.ApplicationServices.GetService<RoleManager<IdentityRole>>()).Seed();
 
         }
     }

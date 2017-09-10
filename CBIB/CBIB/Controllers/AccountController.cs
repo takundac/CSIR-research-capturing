@@ -23,6 +23,7 @@ namespace CBIB.Controllers
         private readonly IEmailSender _emailSender;
         private readonly ISmsSender _smsSender;
         private readonly ILogger _logger;
+        private readonly CBIBContext _context;
         private readonly string _externalCookieScheme;
 
         public AccountController(
@@ -31,7 +32,8 @@ namespace CBIB.Controllers
             IOptions<IdentityCookieOptions> identityCookieOptions,
             IEmailSender emailSender,
             ISmsSender smsSender,
-            ILoggerFactory loggerFactory)
+            ILoggerFactory loggerFactory,
+            CBIBContext context)
         {
             _userManager = userManager;
             _signInManager = signInManager;
@@ -39,6 +41,7 @@ namespace CBIB.Controllers
             _emailSender = emailSender;
             _smsSender = smsSender;
             _logger = loggerFactory.CreateLogger<AccountController>();
+            _context = context;
         }
 
         //
@@ -121,6 +124,10 @@ namespace CBIB.Controllers
         public async Task<IActionResult> Register(RegisterViewModel model, string returnUrl = null)
         {
             ViewData["ReturnUrl"] = returnUrl;
+
+            /// genrates unique author id 
+            var authorID = GenerateId();
+
             if (ModelState.IsValid)
             {
                 var user = new ApplicationUser {
@@ -128,8 +135,19 @@ namespace CBIB.Controllers
                     Email = model.Email,
                     FirstName = model.FirstName,
                     LastName = model.LastName,
-                    AuthorID = GenerateId()
+                    AuthorID = authorID
                 };
+
+                var authors = new Author
+                {
+                    AuthorID = authorID,
+                    Firstname = model.FirstName,
+                    Lastname = model.LastName
+                };
+
+                _context.Author.Add(authors);
+
+                _context.SaveChanges();
 
                 var result = await _userManager.CreateAsync(user, model.Password);
                 if (result.Succeeded)
