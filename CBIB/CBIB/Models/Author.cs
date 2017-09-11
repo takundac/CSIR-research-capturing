@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace CBIB.Models
@@ -13,5 +14,7 @@ namespace CBIB.Models
 
         [Display(Name = "Last Name")]
         public string Lastname { get; set; }
+
+        public ICollection<Journal> Journals { get; set; }
     }
 }
