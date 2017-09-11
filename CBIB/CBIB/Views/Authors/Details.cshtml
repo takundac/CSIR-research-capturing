@@ -7,20 +7,35 @@
 <h2>Details</h2>
 
 <div>
-    <h4>Author</h4>
     <hr />
     <dl class="dl-horizontal">
         <dt>
-            @Html.DisplayNameFor(model => model.Firstname)
+            Authour
         </dt>
         <dd>
-            @Html.DisplayFor(model => model.Firstname)
+            @Html.DisplayFor(model => model.Firstname) @Html.DisplayFor(model => model.Lastname)
         </dd>
         <dt>
-            @Html.DisplayNameFor(model => model.Lastname)
+            @Html.DisplayNameFor(model => model.Journals) p
         </dt>
         <dd>
-            @Html.DisplayFor(model => model.Lastname)
+            <table class="table">
+                <tr>
+                    <th>Title</th>
+                    <th>Year</th>
+                </tr>
+                @foreach (var item in Model.Journals)
+                {
+                    <tr>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Title)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Year)
+                        </td>
+                    </tr>
+                }
+            </table>
         </dd>
     </dl>
 </div>

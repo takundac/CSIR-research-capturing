@@ -33,6 +33,8 @@ namespace CBIB.Controllers
             }
 
             var author = await _context.Author
+                .Include(j => j.Journals)
+                    .AsNoTracking()
                 .SingleOrDefaultAsync(m => m.AuthorID == id);
             if (author == null)
             {
