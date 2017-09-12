@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
+using CBIB.Models;
 
 namespace CBIB.Models
 {
@@ -14,5 +15,7 @@ namespace CBIB.Models
         }
 
         public DbSet<CBIB.Models.Author> Author { get; set; }
+
+        public DbSet<CBIB.Models.Journal> Journal { get; set; }
     }
 }

@@ -133,16 +133,14 @@ namespace CBIB.Controllers
                 var user = new ApplicationUser {
                     UserName = model.Email,
                     Email = model.Email,
-                    FirstName = model.FirstName,
-                    LastName = model.LastName,
+                    Name = model.FirstName +" "+ model.LastName,
                     AuthorID = authorID
                 };
 
                 var authors = new Author
                 {
                     AuthorID = authorID,
-                    Firstname = model.FirstName,
-                    Lastname = model.LastName
+                    Name = model.FirstName + " " + model.LastName        
                 };
 
                 _context.Author.Add(authors);

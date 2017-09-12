@@ -1,30 +1,30 @@
-using System;
-using System.Collections.Generic;
+using CBIB.Models;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using System.Linq;
 using System.Threading.Tasks;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Rendering;
-using Microsoft.EntityFrameworkCore;
-using CBIB.Models;
 
 namespace CBIB.Controllers
 {
-    public class AuthorsController : Controller
+    public class JournalsController : Controller
     {
         private readonly CBIBContext _context;
+        private readonly UserManager<ApplicationUser> _userManager;
 
-        public AuthorsController(CBIBContext context)
+        public JournalsController(CBIBContext context, UserManager<ApplicationUser> userManager)
         {
-            _context = context;    
+            _context = context;
+            _userManager = userManager;
         }
 
-        // GET: Authors
+        // GET: Journals
         public async Task<IActionResult> Index()
         {
-            return View(await _context.Author.ToListAsync());
+            return View(await _context.Journal.ToListAsync());
         }
 
-        // GET: Authors/Details/5
+        // GET: Journals/Details/5
         public async Task<IActionResult> Details(long? id)
         {
             if (id == null)
@@ -32,42 +32,44 @@ namespace CBIB.Controllers
                 return NotFound();
             }
 
-            var author = await _context.Author
-                .Include(j => j.Journals)
-                .AsNoTracking()
-                .SingleOrDefaultAsync(m => m.AuthorID == id);
-
-            if (author == null)
+            var journal = await _context.Journal
+                .SingleOrDefaultAsync(m => m.ID == id);
+            if (journal == null)
             {
                 return NotFound();
             }
 
-            return View(author);
+            return View(journal);
         }
 
-        // GET: Authors/Create
+        // GET: Journals/Create
         public IActionResult Create()
         {
             return View();
         }
 
-        // POST: Authors/Create
-        // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
-        // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("AuthorID,Firstname,Lastname")] Author author)
+        public async Task<IActionResult> Create([Bind("ID,Title,Year")] Journal journal)
         {
+            var user = await _userManager.GetUserAsync(User);
+            var author = _context.Author.Find(user.AuthorID);
+
             if (ModelState.IsValid)
             {
-                _context.Add(author);
+                journal.AuthorID = user.AuthorID;
+                _context.Add(journal);
                 await _context.SaveChangesAsync();
+
+                author.Journals.Add(journal);
+                await _context.SaveChangesAsync();
+
                 return RedirectToAction("Index");
             }
-            return View(author);
+            return View(journal);
         }
 
-        // GET: Authors/Edit/5
+        // GET: Journals/Edit/5
         public async Task<IActionResult> Edit(long? id)
         {
             if (id == null)
@@ -75,22 +77,22 @@ namespace CBIB.Controllers
                 return NotFound();
             }
 
-            var author = await _context.Author.SingleOrDefaultAsync(m => m.AuthorID == id);
-            if (author == null)
+            var journal = await _context.Journal.SingleOrDefaultAsync(m => m.ID == id);
+            if (journal == null)
             {
                 return NotFound();
             }
-            return View(author);
+            return View(journal);
         }
 
-        // POST: Authors/Edit/5
+        // POST: Journals/Edit/5
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(long id, [Bind("AuthorID,Firstname,Lastname")] Author author)
+        public async Task<IActionResult> Edit(long id, [Bind("ID,Title,Year,AuthorID")] Journal journal)
         {
-            if (id != author.AuthorID)
+            if (id != journal.ID)
             {
                 return NotFound();
             }
@@ -99,12 +101,12 @@ namespace CBIB.Controllers
             {
                 try
                 {
-                    _context.Update(author);
+                    _context.Update(journal);
                     await _context.SaveChangesAsync();
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (!AuthorExists(author.AuthorID))
+                    if (!JournalExists(journal.ID))
                     {
                         return NotFound();
                     }
@@ -115,10 +117,10 @@ namespace CBIB.Controllers
                 }
                 return RedirectToAction("Index");
             }
-            return View(author);
+            return View(journal);
         }
 
-        // GET: Authors/Delete/5
+        // GET: Journals/Delete/5
         public async Task<IActionResult> Delete(long? id)
         {
             if (id == null)
@@ -126,30 +128,30 @@ namespace CBIB.Controllers
                 return NotFound();
             }
 
-            var author = await _context.Author
-                .SingleOrDefaultAsync(m => m.AuthorID == id);
-            if (author == null)
+            var journal = await _context.Journal
+                .SingleOrDefaultAsync(m => m.ID == id);
+            if (journal == null)
             {
                 return NotFound();
             }
 
-            return View(author);
+            return View(journal);
         }
 
-        // POST: Authors/Delete/5
+        // POST: Journals/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(long id)
         {
-            var author = await _context.Author.SingleOrDefaultAsync(m => m.AuthorID == id);
-            _context.Author.Remove(author);
+            var journal = await _context.Journal.SingleOrDefaultAsync(m => m.ID == id);
+            _context.Journal.Remove(journal);
             await _context.SaveChangesAsync();
             return RedirectToAction("Index");
         }
 
-        private bool AuthorExists(long id)
+        private bool JournalExists(long id)
         {
-            return _context.Author.Any(e => e.AuthorID == id);
+            return _context.Journal.Any(e => e.ID == id);
         }
     }
 }
