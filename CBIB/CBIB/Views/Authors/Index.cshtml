@@ -4,7 +4,7 @@
     ViewData["Title"] = "Index";
 }
 
-<h2>Index</h2>
+<h3>Authors</h3>
 
 <p>
     <a asp-action="Create">Create New</a>
@@ -12,7 +12,7 @@
 
 <form asp-controller="Authors" asp-action="Index">
     <p>
-        Title: <input type="text" name="id">
+        <input type="text" name="id">
         <input type="submit" value="search" />
     </p>
 </form>
@@ -21,7 +21,7 @@
     <thead>
         <tr>
             <th>
-                @Html.DisplayNameFor(model => model.Name)
+               Author @Html.DisplayNameFor(model => model.Name)
             </th>
         </tr>
     </thead>
@@ -32,7 +32,7 @@
                 @Html.DisplayFor(modelItem => item.Name)
             </td>
             <td>
-                <a asp-action="Edit" asp-route-id="@item.AuthorID">Edit</a> |
+                <!--<a asp-action="Edit" asp-route-id="@item.AuthorID">Edit</a> |-->
                 <a asp-action="Details" asp-route-id="@item.AuthorID">Details</a>
             </td>
         </tr>
