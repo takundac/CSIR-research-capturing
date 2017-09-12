@@ -19,11 +19,16 @@ namespace CBIB.Controllers
         }
 
         // GET: Authors
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(string id)
         {
-            return View(await _context.Author.ToListAsync());
-        }
+            var movies = from m in _context.Author select m;
 
+            if (!String.IsNullOrEmpty(id))
+            {
+                movies = movies.Where(s => s.Name.Contains(id));
+            }
+            return View(await movies.ToListAsync());
+        }
         // GET: Authors/Details/5
         public async Task<IActionResult> Details(long? id)
         {
