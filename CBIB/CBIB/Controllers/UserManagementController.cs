@@ -1,6 +1,7 @@
 ﻿using CBIB.Data;
 using CBIB.Models;
 using CBIB.Views.ViewModels;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.AspNetCore.Mvc;
@@ -12,6 +13,8 @@ using System.Threading.Tasks;
 
 namespace CBIB.Controllers
 {
+    [Authorize(Roles="Global Administrator")]
+
     public class UserManagementController : Controller
     {
         private readonly ApplicationDbContext _dbContext;

@@ -28,7 +28,8 @@ namespace CBIB.Controllers
                 movies = movies.Where(s => s.Name.Contains(id));
             }
             return View(await movies.ToListAsync());
-        }
+        }
+
         // GET: Authors/Details/5
         public async Task<IActionResult> Details(long? id)
         {
