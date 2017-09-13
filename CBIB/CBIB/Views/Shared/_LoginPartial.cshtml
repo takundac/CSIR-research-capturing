@@ -19,11 +19,15 @@
                 </li>
             }
             <li>
-                <a asp-area="" asp-controller="Authors" asp-action="Index">View Users</a>
+                <a asp-area="" asp-controller="Journals" asp-action="Index">Journals</a>
+            </li>
+
+            <li>
+                <a asp-area="" asp-controller="Authors" asp-action="Index">View Authors</a>
             </li>
             
             <li>
-                <a asp-area="" asp-controller="Manage" asp-action="Index" title="Manage">@UserManager.GetUserName(User)!</a>
+                <a asp-area="" asp-controller="Manage" asp-action="Index" title="Manage">@UserManager.GetUserName(User)</a>
             </li>
             <li>
                 <button type="submit" class="btn btn-link navbar-btn navbar-link">Log out</button>
