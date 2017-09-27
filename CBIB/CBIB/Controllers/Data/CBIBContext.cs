@@ -14,8 +14,10 @@ namespace CBIB.Models
         {
         }
 
-        public DbSet<CBIB.Models.Author> Author { get; set; }
+        public DbSet<Author> Author { get; set; }
 
-        public DbSet<CBIB.Models.Journal> Journal { get; set; }
+        public DbSet<Journal> Journal { get; set; }
+
+        public DbSet<CBIB.Models.Node> Node { get; set; }
     }
 }

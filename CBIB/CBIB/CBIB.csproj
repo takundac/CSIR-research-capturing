@@ -8,6 +8,8 @@
 
   <ItemGroup>
     <Compile Remove="Controllers\ApplicationRoleController.cs" />
+    <Compile Remove="Views\ViewModels\NodesAddRoleViewModel.cs" />
+    <Compile Remove="Views\ViewModels\NodesIndexViewModel.cs" />
     <Compile Remove="Views\ViewModels\UserManagementControllerViewModel.cs" />
   </ItemGroup>
 

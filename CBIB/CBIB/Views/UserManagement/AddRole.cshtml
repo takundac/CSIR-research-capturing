@@ -1,9 +1,19 @@
 ﻿@model CBIB.Views.ViewModels.UserManagementAddRoleViewModel
 
+ @{
+   ViewData["Title"] = "Add Role";
+}
+
 <h3>Add Role For @Model.Email</h3>
 <div asp-validation-summary="All"></div>
 <form asp-controller="UserManagement" asp-action="AddRole">
     <input asp-for="UserId" type="hidden" />
-    <select asp-for="NewRole" asp-items="Model.Roles"></select>
-    <input type="submit" value="Add Role" />
+    <select asp-for="UserId" asp-items="@(new SelectList(@ViewBag.ListOfNodes,"ID", "Name"))"></select>
+    <div class="form-group">
+        <div class="row">
+            <div class="col-xs-12 col-sm-6 col-md-6 col-lg-4">
+                <input id="Submit1" type="submit" value="submit" />
+            </div>
+        </div>
+    </div>
 </form>

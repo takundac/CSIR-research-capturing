@@ -1,12 +1,12 @@
 ﻿@using Microsoft.AspNetCore.Identity;
-@model CBIB.Views.ViewModels.UserManagementIndexViewModel
+@model CBIB.Views.ViewModels.NodesIndexViewModel
 @inject UserManager<ApplicationUser> userManager
 
 <table class="table">
     <thead>
         <tr>
             <th>User ID</th>
-            <th>Roles</th>
+            <th>Node</th>
             <th>Options</th>
         </tr>
     </thead>
@@ -15,13 +15,8 @@
         {
             <tr>
                 <td>@user.Email</td>
-                <td>@(string.Join(",", await userManager.GetRolesAsync(user)))</td>
-                <td><a asp-controller="UserManagement" asp-action="AddRole" asp-route-id="@user.Id">Add Role</a></td>
-
                 @*<td>@(string.Join(",", await userManager.GetRolesAsync(user)))</td>*@
-                <td><a asp-controller="UserManagement" asp-action="AddNode">Add Node</a></td>
-
-
+                <td><a asp-controller="Nodes" asp-action="AddNode" asp-route-id="@user.Id">Add Node</a></td>
             </tr>
         }
     </tbody>
