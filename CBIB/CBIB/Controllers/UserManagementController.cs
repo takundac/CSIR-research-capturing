@@ -13,7 +13,7 @@ using System.Threading.Tasks;
 
 namespace CBIB.Controllers
 {
-    [Authorize(Roles="Global Administrator")]
+    //[Authorize(Roles="Global Administrator")]
 
     public class UserManagementController : Controller
     {
