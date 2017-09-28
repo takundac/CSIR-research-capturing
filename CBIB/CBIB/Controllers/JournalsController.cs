@@ -1,7 +1,11 @@
 using CBIB.Models;
+using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -12,10 +16,13 @@ namespace CBIB.Controllers
         private readonly CBIBContext _context;
         private readonly UserManager<ApplicationUser> _userManager;
 
-        public JournalsController(CBIBContext context, UserManager<ApplicationUser> userManager)
+        private IHostingEnvironment _environment;
+
+        public JournalsController(CBIBContext context, UserManager<ApplicationUser> userManager, IHostingEnvironment environment)
         {
             _context = context;
             _userManager = userManager;
+            _environment = environment;
         }
 
         // GET: Journals
@@ -153,5 +160,25 @@ namespace CBIB.Controllers
         {
             return _context.Journal.Any(e => e.ID == id);
         }
+        
+            
+
+            [HttpPost]
+            public async Task<IActionResult> Upload(ICollection<IFormFile> files)
+            {
+                var uploads = Path.Combine(_environment.WebRootPath, "uploads");
+                foreach (var file in files)
+                {
+                    if (file.Length > 0)
+                    {
+                        using (var fileStream = new FileStream(Path.Combine(uploads, file.FileName), FileMode.Create))
+                        {
+                            await file.CopyToAsync(fileStream);
+                        }
+                    }
+                }
+                return View("Create");
+            }
+        
     }
 }
