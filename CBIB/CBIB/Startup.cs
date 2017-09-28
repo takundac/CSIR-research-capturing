@@ -127,7 +127,7 @@ namespace CBIB
                     name: "default",
                     template: "{controller=Home}/{action=Index}/{id?}");
             });
-           //new UserRoleSeed(app.ApplicationServices.GetService<RoleManager<IdentityRole>>()).Seed();
+           new UserRoleSeed(app.ApplicationServices.GetService<RoleManager<IdentityRole>>()).Seed();
 
         }
     }

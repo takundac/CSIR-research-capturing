@@ -1,7 +1,6 @@
 ﻿using CBIB.Data;
 using CBIB.Models;
 using CBIB.Views.ViewModels;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.AspNetCore.Mvc;
@@ -59,50 +58,40 @@ namespace CBIB.Controllers
             };
             return View(vm);
         }
-        //[HttpGet]
-        //public async Task<IActionResult> AddNode(string id)
-        //{
-        //    var user = await GetUserById(id);
-        //    var vm = new NodesAddRoleViewModel
-        //    {
-        //        Nodes = GetAllNodes(),
-        //        UserId = id,
-        //        Email = user.Email
-        //    };
-        //    return View(vm);
-        //}
-
-        //[HttpPost]
-        //public async Task<IActionResult> AddRole(UserManagementAddRoleViewModel rvm)
-        //{
-        //    var user = await GetUserById(rvm.UserId);
-        //    if (ModelState.IsValid)
-        //    {
-        //        var result = await _userManager.AddToRoleAsync(user, rvm.NewRole);
-        //        if (result.Succeeded)
-        //        {
-        //            return RedirectToAction("Index");
-        //        }
-        //        foreach (var error in result.Errors)
-        //        {
-        //            ModelState.AddModelError(error.Code, error.Description);
-        //        }
-        //    }
-        //    rvm.Email = user.Email;
-        //    rvm.Roles = GetAllRoles();
-        //    return View(rvm);
-
-        //}
-
-        private async Task<ApplicationUser> GetUserById(string id) =>
-            await _userManager.FindByIdAsync(id);
-
-        private SelectList GetAllRoles() => new SelectList(_roleManager.Roles.OrderBy(r => r.Name));
-
-        //private SelectList GetAllNodes() => new SelectList(_CBIBContext.Node.ToList);
-
-        public IActionResult AddNode()
+       
+        [HttpPost]
+        public async Task<IActionResult> AddRole(UserManagementAddRoleViewModel rvm)
         {
+            var user = await GetUserById(rvm.UserId);
+            if (ModelState.IsValid)
+            {
+                var result = await _userManager.AddToRoleAsync(user, rvm.NewRole);
+            
+                if (result.Succeeded)
+                {
+                    return RedirectToAction("Index");
+                }
+                foreach (var error in result.Errors)
+                {
+                    ModelState.AddModelError(error.Code, error.Description);
+                }
+            }
+            rvm.Email = user.Email;
+            rvm.Roles = GetAllRoles();
+            return View(rvm);
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> AddNode(string id)
+        {
+            var user = await GetUserById(id);
+
+            var vm = new UserManagementAddRoleViewModel
+            {
+                UserId = id,
+                Email = user.Email
+            };
+
             List<Node> nodes = new List<Node>();
 
             nodes = (from Name in _CBIBContext.Node select Name).ToList();
@@ -114,12 +103,14 @@ namespace CBIB.Controllers
             });
 
             ViewBag.ListOfNodes = nodes;
-            return View();
+            return View(vm);
         }
 
         [HttpPost]
-        public IActionResult Index(Node node)
+        public async Task<IActionResult> Index(Node node, UserManagementAddRoleViewModel rvm)
         {
+            var user = await GetUserById(rvm.UserId);
+
             if (node.ID == 0)
             {
                 ModelState.AddModelError("", "Select Country");
@@ -143,9 +134,14 @@ namespace CBIB.Controllers
 
             ViewBag.ListOfNodes = nodes;
 
-            return View();
+            return View(rvm);
         }
 
 
+
+        private async Task<ApplicationUser> GetUserById(string id) =>
+            await _userManager.FindByIdAsync(id);
+
+        private SelectList GetAllRoles() => new SelectList(_roleManager.Roles.OrderBy(r => r.Name));
     }
 }
