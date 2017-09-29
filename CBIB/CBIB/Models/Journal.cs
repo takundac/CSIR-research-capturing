@@ -12,6 +12,8 @@ namespace CBIB.Models
         public string Year { get; set; }
         public string Abstract { get; set; }
 
+        public string url { get; set; }
+
         public long AuthorID { get; set; }
     }
 }

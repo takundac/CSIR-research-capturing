@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -55,16 +56,66 @@ namespace CBIB.Controllers
             return View();
         }
 
+        //Download
+        public IActionResult Download(string url)
+        {
+            return File("/uploads/CBIB[351].pdf", "application/pdf", "Too.pdf");
+        }
+
+        //Task Download
+        public async Task<IActionResult> TaskDownload(long id)
+        {
+            var journal = from m in _context.Journal select m;
+
+            var journalList = (await journal.ToListAsync());
+
+            var journalUrl ="";
+
+            foreach (Journal j in journalList)
+            {
+                if (j.ID==id)
+                {
+                    journalUrl = j.url;        
+                }
+            }
+            return File(journalUrl, "application/pdf", "Too.pdf");
+        }
+
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("ID,Title,Year")] Journal journal)
+        public async Task<IActionResult> Create([Bind("ID,Title,Year,Abstract")] Journal journal, ICollection<IFormFile> files)
         {
+            string url = "";
+            var uploads = Path.Combine(_environment.WebRootPath, "uploads");
+            foreach (var file in files)
+            {
+                if (file.Length > 0)
+                {
+                    url = Path.Combine(uploads, file.FileName);
+                   
+                    using (var fileStream = new FileStream(url, FileMode.Create))
+                    {
+                        await file.CopyToAsync(fileStream);
+                    }
+                }
+            }
+
+            string SignificantPath = url;
+            int index = 0;
+            index = SignificantPath.IndexOf("uploads");
+
+            SignificantPath = url.Substring(index-1);
+            SignificantPath = @SignificantPath.Replace("\\","/");
+
+            url = SignificantPath;
+
             var user = await _userManager.GetUserAsync(User);
             var author = _context.Author.Find(user.AuthorID);
 
             if (ModelState.IsValid)
             {
                 journal.AuthorID = user.AuthorID;
+                journal.url = url;
                 _context.Add(journal);
                 await _context.SaveChangesAsync();
 
@@ -160,25 +211,5 @@ namespace CBIB.Controllers
         {
             return _context.Journal.Any(e => e.ID == id);
         }
-        
-            
-
-            [HttpPost]
-            public async Task<IActionResult> Upload(ICollection<IFormFile> files)
-            {
-                var uploads = Path.Combine(_environment.WebRootPath, "uploads");
-                foreach (var file in files)
-                {
-                    if (file.Length > 0)
-                    {
-                        using (var fileStream = new FileStream(Path.Combine(uploads, file.FileName), FileMode.Create))
-                        {
-                            await file.CopyToAsync(fileStream);
-                        }
-                    }
-                }
-                return View("Create");
-            }
-        
     }
 }
