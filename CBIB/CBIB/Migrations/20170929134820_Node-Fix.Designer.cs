@@ -8,9 +8,10 @@ using CBIB.Models;
 namespace CBIB.Migrations
 {
     [DbContext(typeof(CBIBContext))]
-    partial class CBIBContextModelSnapshot : ModelSnapshot
+    [Migration("20170929134820_Node-Fix")]
+    partial class NodeFix
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
             modelBuilder
                 .HasAnnotation("ProductVersion", "1.1.2")

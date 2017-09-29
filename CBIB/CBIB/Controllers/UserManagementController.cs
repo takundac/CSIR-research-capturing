@@ -107,7 +107,7 @@ namespace CBIB.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> Index(Node node, UserManagementAddRoleViewModel rvm)
+        public async Task<IActionResult> Index(Node node, UserManagementAddRoleViewModel rvm, string id)
         {
             var user = await GetUserById(rvm.UserId);
 
@@ -119,6 +119,12 @@ namespace CBIB.Controllers
             long SelectValue = node.ID;
 
             ViewBag.SelectedValue = node.ID;
+
+            var author = await _CBIBContext.Author.FindAsync(user.AuthorID);
+            var nodeAssigned = (await _CBIBContext.Node.FindAsync(node.ID));
+
+            nodeAssigned.Authors.Add(author);
+            await _CBIBContext.SaveChangesAsync();
 
             // ------- Setting Data back to ViewBag after Posting Form ------- //
 
