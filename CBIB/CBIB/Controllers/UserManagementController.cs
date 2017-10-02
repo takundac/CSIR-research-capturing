@@ -123,7 +123,7 @@ namespace CBIB.Controllers
             var author = await _CBIBContext.Author.FindAsync(user.AuthorID);
             var nodeAssigned = (await _CBIBContext.Node.FindAsync(node.ID));
 
-            nodeAssigned.Authors.Add(author);
+            //nodeAssigned.Authors.Add(author);
             await _CBIBContext.SaveChangesAsync();
 
             // ------- Setting Data back to ViewBag after Posting Form ------- //

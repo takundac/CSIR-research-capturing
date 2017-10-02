@@ -10,6 +10,6 @@ namespace CBIB.Models
         public string Name { get; set; }
 
         //list of authors on the node
-        public ICollection<Author> Authors { get; set; }
+       // public ICollection<Author> Authors { get; set; }
     }
 }
