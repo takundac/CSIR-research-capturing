@@ -56,12 +56,6 @@ namespace CBIB.Controllers
             return View();
         }
 
-        //Download
-        public IActionResult Download(string url)
-        {
-            return File("/uploads/CBIB[351].pdf", "application/pdf", "Too.pdf");
-        }
-
         //Task Download
         public async Task<IActionResult> TaskDownload(long id)
         {
