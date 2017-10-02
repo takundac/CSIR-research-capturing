@@ -13,7 +13,7 @@ namespace CBIB.Models
         public string Name { get; set; }
 
         public ICollection<Journal> Journals { get; set; }
-        public long NodeID { get; set; }
+        public Node Node { get; set; }
 
     }
 }
