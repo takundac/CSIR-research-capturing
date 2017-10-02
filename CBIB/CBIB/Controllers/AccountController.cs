@@ -110,6 +110,25 @@ namespace CBIB.Controllers
         [HttpGet]
         public IActionResult Register(string returnUrl = null)
         {
+            //var user = await GetUserById(id);
+
+            //var vm = new UserManagementAddRoleViewModel
+            //{
+            //    UserId = id,
+            //    Email = user.Email
+            //};
+
+            List<Node> nodes = new List<Node>();
+
+            nodes = (from Name in _context.Node select Name).ToList();
+
+            nodes.Insert(0, new Node
+            {
+                ID = 0,
+                Name = "Select"
+            });
+
+            ViewBag.ListOfNodes = nodes;
             ViewData["ReturnUrl"] = returnUrl;
             return View();
         }
@@ -118,7 +137,7 @@ namespace CBIB.Controllers
         // POST: /Account/Register
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Register(RegisterViewModel model, string returnUrl = null)
+        public async Task<IActionResult> Register(RegisterViewModel model, Node node, string returnUrl = null)
         {
             ViewData["ReturnUrl"] = returnUrl;
 
@@ -140,11 +159,40 @@ namespace CBIB.Controllers
                     Name = model.FirstName + " " + model.LastName        
                 };
 
-                _context.Author.Add(authors);
+                var result = await _userManager.CreateAsync(user, model.Password);
 
+                if (node.ID == 0)
+                {
+                    ModelState.AddModelError("", "Select Country");
+                }
+
+                long SelectValue = node.ID;
+
+                ViewBag.SelectedValue = node.ID;
+
+                //var author = await _context.Author.FindAsync(user.AuthorID);
+                var nodeAssigned = (await _context.Node.FindAsync(node.ID));
+
+                List<Node> nodes = new List<Node>();
+
+                nodes = (from product in _context.Node select product).ToList();
+
+                nodes.Insert(0, new Node
+                {
+                    ID = 0,
+                    Name = "Select"
+                });
+
+                ViewBag.ListOfNodes = nodes;
+
+                authors.NodeID = node.ID;
+
+                _context.Author.Add(authors);
                 _context.SaveChanges();
 
-                var result = await _userManager.CreateAsync(user, model.Password);
+                nodeAssigned.Authors.Add(authors);
+                await _context.SaveChangesAsync();
+
                 if (result.Succeeded)
                 {
                     // For more information on how to enable account confirmation and password reset please visit https://go.microsoft.com/fwlink/?LinkID=532713

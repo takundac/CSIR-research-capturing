@@ -143,8 +143,6 @@ namespace CBIB.Controllers
             return View(rvm);
         }
 
-
-
         private async Task<ApplicationUser> GetUserById(string id) =>
             await _userManager.FindByIdAsync(id);
 
