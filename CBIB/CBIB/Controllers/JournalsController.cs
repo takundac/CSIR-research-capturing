@@ -1,7 +1,12 @@
 using CBIB.Models;
+using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using System;
+using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -12,10 +17,13 @@ namespace CBIB.Controllers
         private readonly CBIBContext _context;
         private readonly UserManager<ApplicationUser> _userManager;
 
-        public JournalsController(CBIBContext context, UserManager<ApplicationUser> userManager)
+        private IHostingEnvironment _environment;
+
+        public JournalsController(CBIBContext context, UserManager<ApplicationUser> userManager, IHostingEnvironment environment)
         {
             _context = context;
             _userManager = userManager;
+            _environment = environment;
         }
 
         // GET: Journals
@@ -48,16 +56,60 @@ namespace CBIB.Controllers
             return View();
         }
 
+        //Task Download
+        public async Task<IActionResult> TaskDownload(long id)
+        {
+            var journal = from m in _context.Journal select m;
+
+            var journalList = (await journal.ToListAsync());
+
+            var journalUrl ="";
+
+            foreach (Journal j in journalList)
+            {
+                if (j.ID==id)
+                {
+                    journalUrl = j.url;        
+                }
+            }
+            return File(journalUrl, "application/pdf", "Too.pdf");
+        }
+
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("ID,Title,Year")] Journal journal)
+        public async Task<IActionResult> Create([Bind("ID,Title,Year,Abstract")] Journal journal, ICollection<IFormFile> files)
         {
+            string url = "";
+            var uploads = Path.Combine(_environment.WebRootPath, "uploads");
+            foreach (var file in files)
+            {
+                if (file.Length > 0)
+                {
+                    url = Path.Combine(uploads, file.FileName);
+                   
+                    using (var fileStream = new FileStream(url, FileMode.Create))
+                    {
+                        await file.CopyToAsync(fileStream);
+                    }
+                }
+            }
+
+            string SignificantPath = url;
+            int index = 0;
+            index = SignificantPath.IndexOf("uploads");
+
+            SignificantPath = url.Substring(index-1);
+            SignificantPath = @SignificantPath.Replace("\\","/");
+
+            url = SignificantPath;
+
             var user = await _userManager.GetUserAsync(User);
             var author = _context.Author.Find(user.AuthorID);
 
             if (ModelState.IsValid)
             {
                 journal.AuthorID = user.AuthorID;
+                journal.url = url;
                 _context.Add(journal);
                 await _context.SaveChangesAsync();
 

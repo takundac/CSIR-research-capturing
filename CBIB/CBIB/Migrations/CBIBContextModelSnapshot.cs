@@ -44,6 +44,8 @@ namespace CBIB.Migrations
 
                     b.Property<string>("Year");
 
+                    b.Property<string>("url");
+
                     b.HasKey("ID");
 
                     b.HasIndex("AuthorID");
