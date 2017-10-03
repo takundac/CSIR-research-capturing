@@ -1,5 +1,6 @@
 @model CBIB.Models.Journal
-
+@inject SignInManager<ApplicationUser> SignInManager
+@inject UserManager<ApplicationUser> UserManager
 @{
     ViewData["Title"] = "Details";
 }
@@ -32,8 +33,11 @@
 </div>
 
 <div>
-    <a asp-action="Edit" asp-route-id="@Model.ID">Edit</a> |
-    <a asp-action="Index">Back to List</a>
-    <a asp-controller="Journals" asp-action="JournalDownload" asp-route-id="@Model.ID">Download pdf copy of Journal</a> |
-    <a asp-controller="Journals" asp-action="PeerReviewDownload" asp-route-id="@Model.ID">Download pdf copy of Peer Review</a>
+    <a asp-action="Edit" asp-route-id="@Model.ID">Edit</a> ||
+    <a asp-action="Index">Back to List</a> ||
+    <a asp-controller="Journals" asp-action="JournalDownload" asp-route-id="@Model.ID">Download pdf copy of Journal</a> ||
+    @if (User.IsInRole("Global Administrator")|| User.IsInRole("Node Administrator"))
+    {
+        <a asp-controller="Journals" asp-action="PeerReviewDownload" asp-route-id="@Model.ID">Download pdf copy of Peer Review</a>
+    }
 </div>

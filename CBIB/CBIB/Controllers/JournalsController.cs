@@ -1,4 +1,5 @@
 using CBIB.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
@@ -62,6 +63,7 @@ namespace CBIB.Controllers
             return File((await Download(id, "JournalUrl")), "application/pdf", "Too.pdf");
         }
 
+        [Authorize(Roles = "Global Administrator,  Node Administrator")]
         public async Task<IActionResult> PeerReviewDownload(long id)
         {
             return File((await Download(id, "PeerUrl")), "application/pdf", "Too.pdf");
