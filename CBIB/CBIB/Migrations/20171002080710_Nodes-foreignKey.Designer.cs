@@ -8,9 +8,10 @@ using CBIB.Models;
 namespace CBIB.Migrations
 {
     [DbContext(typeof(CBIBContext))]
-    partial class CBIBContextModelSnapshot : ModelSnapshot
+    [Migration("20171002080710_Nodes-foreignKey")]
+    partial class NodesforeignKey
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
             modelBuilder
                 .HasAnnotation("ProductVersion", "1.1.2")
@@ -22,7 +23,11 @@ namespace CBIB.Migrations
 
                     b.Property<string>("Name");
 
+                    b.Property<long?>("NodeID");
+
                     b.HasKey("AuthorID");
+
+                    b.HasIndex("NodeID");
 
                     b.ToTable("Author");
                 });
@@ -36,23 +41,9 @@ namespace CBIB.Migrations
 
                     b.Property<long>("AuthorID");
 
-                    b.Property<string>("CoAuthor1");
-
-                    b.Property<string>("CoAuthor2");
-
-                    b.Property<bool>("PeerReviewed");
-
-                    b.Property<string>("PeerUrl");
-
-                    b.Property<string>("ProofOfpeerReview");
-
                     b.Property<string>("Title");
 
-                    b.Property<string>("Type");
-
                     b.Property<string>("Year");
-
-                    b.Property<string>("url");
 
                     b.HasKey("ID");
 
@@ -71,6 +62,13 @@ namespace CBIB.Migrations
                     b.HasKey("ID");
 
                     b.ToTable("Node");
+                });
+
+            modelBuilder.Entity("CBIB.Models.Author", b =>
+                {
+                    b.HasOne("CBIB.Models.Node")
+                        .WithMany("Authors")
+                        .HasForeignKey("NodeID");
                 });
 
             modelBuilder.Entity("CBIB.Models.Journal", b =>

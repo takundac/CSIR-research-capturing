@@ -8,9 +8,10 @@ using CBIB.Models;
 namespace CBIB.Migrations
 {
     [DbContext(typeof(CBIBContext))]
-    partial class CBIBContextModelSnapshot : ModelSnapshot
+    [Migration("20171002081131_Nodes-fk")]
+    partial class Nodesfk
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
             modelBuilder
                 .HasAnnotation("ProductVersion", "1.1.2")
@@ -36,23 +37,9 @@ namespace CBIB.Migrations
 
                     b.Property<long>("AuthorID");
 
-                    b.Property<string>("CoAuthor1");
-
-                    b.Property<string>("CoAuthor2");
-
-                    b.Property<bool>("PeerReviewed");
-
-                    b.Property<string>("PeerUrl");
-
-                    b.Property<string>("ProofOfpeerReview");
-
                     b.Property<string>("Title");
 
-                    b.Property<string>("Type");
-
                     b.Property<string>("Year");
-
-                    b.Property<string>("url");
 
                     b.HasKey("ID");
 
