@@ -19,6 +19,31 @@
                 <span asp-validation-for="Title" class="text-danger"></span>
             </div>
         </div>
+
+        <div class="form-group">
+            <label asp-for="Type" class="col-md-2 control-label"></label>
+            <div class="col-md-10">
+                <input asp-for="Type" class="form-control" />
+                <span asp-validation-for="Type" class="text-danger"></span>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label asp-for="CoAuthor1" class="col-md-2 control-label"></label>
+            <div class="col-md-10">
+                <input asp-for="CoAuthor1" class="form-control" />
+                <span asp-validation-for="CoAuthor1" class="text-danger"></span>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label asp-for="CoAuthor2" class="col-md-2 control-label"></label>
+            <div class="col-md-10">
+                <input asp-for="CoAuthor2" class="form-control" />
+                <span asp-validation-for="CoAuthor2" class="text-danger"></span>
+            </div>
+        </div>
+
         <div class="form-group">
             <label asp-for="Year" class="col-md-2 control-label"></label>
             <div class="col-md-10">
@@ -27,6 +52,23 @@
             </div>
         </div>
         
+        <div class="form-group">
+            <label asp-for="Abstract" class="col-md-2 control-label"></label>
+            <div class="col-md-10">
+                <input asp-for="Abstract" class="form-control" />
+                <span asp-validation-for="Abstract" class="text-danger"></span>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <div class="col-md-offset-2 col-md-10">
+                <div class="checkbox">
+                    <label asp-for="PeerReviewed">
+                        <input asp-for="PeerReviewed" />
+                        @Html.DisplayNameFor(m => m.PeerReviewed)
+                    </label>
+                </div>
+            </div>
         </div>
         <div class="form-group">
             <div class="col-md-offset-2 col-md-10">
@@ -34,6 +76,7 @@
             </div>
         </div>
     </div>
+        
 </form>
 
 <div>

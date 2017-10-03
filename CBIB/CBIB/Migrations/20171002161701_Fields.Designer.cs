@@ -8,9 +8,10 @@ using CBIB.Models;
 namespace CBIB.Migrations
 {
     [DbContext(typeof(CBIBContext))]
-    partial class CBIBContextModelSnapshot : ModelSnapshot
+    [Migration("20171002161701_Fields")]
+    partial class Fields
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
             modelBuilder
                 .HasAnnotation("ProductVersion", "1.1.2")
@@ -36,7 +37,8 @@ namespace CBIB.Migrations
                     b.Property<long>("ID")
                         .ValueGeneratedOnAdd();
 
-                    b.Property<string>("Abstract");
+                    b.Property<string>("Abstract")
+                        .IsRequired();
 
                     b.Property<long>("AuthorID");
 
@@ -44,17 +46,18 @@ namespace CBIB.Migrations
 
                     b.Property<string>("CoAuthor2");
 
-                    b.Property<bool>("PeerReviewed");
+                    b.Property<string>("PeerReviewUrl");
 
-                    b.Property<string>("PeerUrl");
+                    b.Property<bool>("ProofOfPeereview");
 
-                    b.Property<string>("ProofOfpeerReview");
+                    b.Property<string>("Title")
+                        .IsRequired();
 
-                    b.Property<string>("Title");
+                    b.Property<string>("TypeOfResearchOutput")
+                        .IsRequired();
 
-                    b.Property<string>("Type");
-
-                    b.Property<string>("Year");
+                    b.Property<string>("Year")
+                        .IsRequired();
 
                     b.Property<string>("url");
 
